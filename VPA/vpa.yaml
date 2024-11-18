@@ -9,4 +9,4 @@ spec:
     kind: Deployment
     name: php-apache
   updatePolicy:
-    updateMode: "Initial"
+    updateMode: "Auto" # Change to "Off", "Initial", or "Recreate" as needed
