@@ -10,3 +10,4 @@ spec:
     name: php-apache
   updatePolicy:
     updateMode: "Auto" # Change to "Off", "Initial", or "Recreate" as needed
+  
