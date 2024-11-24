@@ -275,7 +275,6 @@ Resources:
         - CidrIp: 0.0.0.0/0  # Allow all outbound traffic (necessary for updates, monitoring, etc.)
           IpProtocol: "-1"   # Allow all protocols outbound
       SecurityGroupIngress:
-        # Allow worker node communication from private subnets (by CIDR block)
         - CidrIp: !Ref PrivateSubnet01Block
           IpProtocol: "-1"  # Allow all protocols from PrivateSubnet01
           FromPort: "0"
@@ -284,9 +283,6 @@ Resources:
           IpProtocol: "-1"  # Allow all protocols from PrivateSubnet02
           FromPort: "0"
           ToPort: "65535"
-        # Optionally, you can allow other resources or control plane services if necessary
-        # Example: Allow communication from the EKS control plane services
-        # (if specific ports are known, you can restrict to those ports)
         - CidrIp: 192.168.0.0/16  # Allow communication from the entire VPC (for cluster services, etc.)
           IpProtocol: "-1"
           FromPort: "0"
