@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "abhishek-s3-demo-xyz" # change this
+  bucket = "michael-s3-demo-xyz" # change this
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {
