@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export KARPENTER_VERSION="1.0.8"
+
 helm repo add grafana-charts https://grafana.github.io/helm-charts
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
