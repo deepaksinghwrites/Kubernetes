@@ -25,6 +25,8 @@ tar zxvf "${KREW}.tar.gz"
 # Add krew's binary directory to the PATH
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 
+source ~/.bashrc
+
 # Install the 'tree' plugin using krew
 kubectl krew install tree
 
