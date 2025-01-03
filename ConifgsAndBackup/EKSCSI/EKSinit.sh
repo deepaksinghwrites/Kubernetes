@@ -20,7 +20,7 @@ echo "Initializing and applying EKS_1..."
 cd EKS_us_east_1
 terraform init
 terraform validate
-terraform plan 
+terraform plan -var "bucket=$bucket_name" 
 terraform apply -var "bucket=$bucket_name" -auto-approve
 # Run terraform output to get the outputs in JSON format
 terraform output -json > terraform_outputs.json
