@@ -4,11 +4,11 @@ data "aws_iam_role" "demo" {
 }
 
 
-# Attach AmazonEKSClusterPolicy to the imported IAM role
-resource "aws_iam_role_policy_attachment" "demo_amazon_eks_cluster_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = data.aws_iam_role.demo.name  # Correct reference to the imported IAM role
-}
+## Attach AmazonEKSClusterPolicy to the imported IAM role
+#resource "aws_iam_role_policy_attachment" "demo_amazon_eks_cluster_policy" {
+#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+#  role       = data.aws_iam_role.demo.name  # Correct reference to the imported IAM role
+#}
 
 # Create the EKS Cluster and associate the IAM role
 resource "aws_eks_cluster" "demo" {
@@ -23,6 +23,4 @@ resource "aws_eks_cluster" "demo" {
       aws_subnet.public_us_east_2b.id
     ]
   }
-
-  depends_on = [aws_iam_role_policy_attachment.demo_amazon_eks_cluster_policy]
 }

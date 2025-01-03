@@ -21,10 +21,10 @@ data "aws_iam_role" "eks_ebs_csi_driver" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver" {
-  role       = data.aws_iam_role.eks_ebs_csi_driver.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-}
+#resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver" {
+#  role       = data.aws_iam_role.eks_ebs_csi_driver.name
+#  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+#}
 
 # Optional: only if you use your own KMS key to encrypt EBS volumes
 # TODO: replace arn:aws:kms:us-east-1:424432388155:key/7a8ea545-e379-4ac5-8903-3f5ae22ea847 with your KMS key id arn!

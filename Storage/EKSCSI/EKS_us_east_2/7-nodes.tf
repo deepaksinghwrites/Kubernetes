@@ -3,21 +3,21 @@ data "aws_iam_role" "nodes" {
   name = "eks-node-group-nodes"  # Correct argument name
 }
 
-# Attach policies to the imported IAM role for the Node Group
-resource "aws_iam_role_policy_attachment" "nodes_amazon_eks_worker_node_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = data.aws_iam_role.nodes.name
-}
-
-resource "aws_iam_role_policy_attachment" "nodes_amazon_eks_cni_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = data.aws_iam_role.nodes.name
-}
-
-resource "aws_iam_role_policy_attachment" "nodes_amazon_ec2_container_registry_read_only" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = data.aws_iam_role.nodes.name
-}
+## Attach policies to the imported IAM role for the Node Group
+#resource "aws_iam_role_policy_attachment" "nodes_amazon_eks_worker_node_policy" {
+#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+#  role       = data.aws_iam_role.nodes.name
+#}
+#
+#resource "aws_iam_role_policy_attachment" "nodes_amazon_eks_cni_policy" {
+#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+#  role       = data.aws_iam_role.nodes.name
+#}
+#
+#resource "aws_iam_role_policy_attachment" "nodes_amazon_ec2_container_registry_read_only" {
+#  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+#  role       = data.aws_iam_role.nodes.name
+#}
 
 # Create EKS Node Group and associate with IAM role
 resource "aws_eks_node_group" "private_nodes" {
@@ -47,9 +47,4 @@ resource "aws_eks_node_group" "private_nodes" {
     role = "general"
   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.nodes_amazon_eks_worker_node_policy,
-    aws_iam_role_policy_attachment.nodes_amazon_eks_cni_policy,
-    aws_iam_role_policy_attachment.nodes_amazon_ec2_container_registry_read_only,
-  ]
 }
