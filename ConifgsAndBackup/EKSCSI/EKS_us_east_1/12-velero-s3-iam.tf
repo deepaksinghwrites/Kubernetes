@@ -120,18 +120,3 @@ resource "aws_iam_user_policy_attachment" "velero_attachment" {
 resource "aws_iam_access_key" "velero_access_key" {
   user = aws_iam_user.velero_user.name
 }
-
-# Output Access Key and Secret
-output "velero_access_key_id" {
-  value       = aws_iam_access_key.velero_access_key.id
-  description = "Velero Access Key ID"
-}
-
-output "velero_secret_access_key" {
-  value       = aws_iam_access_key.velero_access_key.secret
-  description = "Velero Secret Access Key"
-  sensitive   = true
-}
-output "velero_policy_arn" {
-  value = aws_iam_policy.velero_policy.arn
-}

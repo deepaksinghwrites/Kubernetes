@@ -41,6 +41,5 @@ output/
 .env.*
 
 # Ignore AWS credentials files
-EKS_us_east_1/credentials-velero
-EKS_us_east_2/credentials-velero2
+credentials-velero
 
