@@ -35,8 +35,8 @@ rm terraform_outputs.json
 
 # Create or overwrite the INI file
 echo "[default]" > "$OUTPUT_FILE"
-echo "aws_velero_user_access_key_id = $AWS_VELERO_USER_ACCESS_KEY_ID" >> "$OUTPUT_FILE"
-echo "aws_velero_user_secret_access_key = $AWS_VELERO_USER_ACCESS_KEY" >> "$OUTPUT_FILE"
+echo "aws_access_key_id = $AWS_VELERO_USER_ACCESS_KEY_ID" >> "$OUTPUT_FILE"
+echo "aws_secret_access_key = $AWS_VELERO_USER_ACCESS_KEY" >> "$OUTPUT_FILE"
 
 # Output message to indicate secret file creation completion
 echo "Terraform secrets saved to $OUTPUT_FILE"

@@ -1,19 +1,30 @@
-# Import the existing IAM role for the EKS Cluster
-data "aws_iam_role" "demo" {
-  name = "eks-cluster-demo"  # Correct argument name
+resource "aws_iam_role" "demo2" {
+  name = "eks-cluster-demo2"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "eks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
 }
 
+resource "aws_iam_role_policy_attachment" "demo2_amazon_eks_cluster_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = aws_iam_role.demo2.name
+}
 
-## Attach AmazonEKSClusterPolicy to the imported IAM role
-#resource "aws_iam_role_policy_attachment" "demo_amazon_eks_cluster_policy" {
-#  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-#  role       = data.aws_iam_role.demo.name  # Correct reference to the imported IAM role
-#}
-
-# Create the EKS Cluster and associate the IAM role
-resource "aws_eks_cluster" "demo" {
-  name     = "demo"
-  role_arn = data.aws_iam_role.demo.arn  # Correct reference to the imported IAM role
+resource "aws_eks_cluster" "demo2" {
+  name     = "demo2"
+  role_arn = aws_iam_role.demo2.arn
 
   vpc_config {
     subnet_ids = [
@@ -23,4 +34,6 @@ resource "aws_eks_cluster" "demo" {
       aws_subnet.public_us_east_2b.id
     ]
   }
+
+  depends_on = [aws_iam_role_policy_attachment.demo2_amazon_eks_cluster_policy]
 }

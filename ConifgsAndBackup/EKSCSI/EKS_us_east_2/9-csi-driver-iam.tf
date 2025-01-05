@@ -1,30 +1,30 @@
-data "aws_iam_policy_document" "csi" {
+data "aws_iam_policy_document" "csi2" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      variable = "${replace(aws_iam_openid_connect_provider.eks2.url, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
     }
 
     principals {
-      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      identifiers = [aws_iam_openid_connect_provider.eks2.arn]
       type        = "Federated"
     }
   }
 }
 
-data "aws_iam_role" "eks_ebs_csi_driver" {
-  name = "eks-ebs-csi-driver"  # Corrected argument to 'name'
+resource "aws_iam_role" "eks_ebs_csi_driver2" {
+  assume_role_policy = data.aws_iam_policy_document.csi2.json
+  name               = "eks-ebs-csi-driver2"
 }
 
-
-#resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver" {
-#  role       = data.aws_iam_role.eks_ebs_csi_driver.name
-#  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-#}
+resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver2" {
+  role       = aws_iam_role.eks_ebs_csi_driver2.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
 
 # Optional: only if you use your own KMS key to encrypt EBS volumes
 # TODO: replace arn:aws:kms:us-east-1:424432388155:key/7a8ea545-e379-4ac5-8903-3f5ae22ea847 with your KMS key id arn!
