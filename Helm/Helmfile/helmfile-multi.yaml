@@ -20,7 +20,6 @@ releases:
         command: "./pre-deploy-prometheus.sh"
         showlogs: true
 
-releases:
   - name: myapp
     chart: bitnami/nginx
     namespace: default
