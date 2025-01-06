@@ -1,8 +1,22 @@
 #!/bin/bash
 
-# Step 1: Generate a GPG key if not already present
+# Prompt for user input to pass to GPG key generation
+echo "Enter your name for the GPG key:"
+read GPG_NAME
+
+echo "Enter your email for the GPG key:"
+read GPG_EMAIL
+
+# Step 1: Generate a GPG key without specifying a passphrase
 echo "Generating GPG key..."
-gpg --full-generate-key
+cat <<EOF | gpg --batch --generate-key
+%no-protection
+Key-Type: 1
+Key-Length: 2048
+Name-Real: $GPG_NAME
+Name-Email: $GPG_EMAIL
+Expire-Date: 0
+EOF
 
 # Step 2: List secret keys and extract the GPG Key ID
 echo "Listing GPG secret keys..."
