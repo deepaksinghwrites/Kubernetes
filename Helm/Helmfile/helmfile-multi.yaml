@@ -9,7 +9,6 @@ releases:
   - name: prometheus
     namespace: monitoring
     chart: prometheus-community/prometheus
-    version: "14.8.0"
     values:
       - values-prometheus.yaml
     set:
