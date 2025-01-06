@@ -1,29 +1,31 @@
 repositories:
-  - name: stable
-    url: https://charts.helm.sh/stable
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
 
-# Define reusable value blocks using YAML anchors
-templates: &defaultValues
-  replicaCount: 3
-  image:
-    repository: nginx
-    tag: latest
-  resources:
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
+# Define a template for Nginx releases
+templates:
+  nginx-template:
+    chart: bitnami/nginx
+    version: "9.1.0"  # Replace with the desired version
+    values:
+      - values-nginx.yaml  # Custom values file
+    set:
+      - name: image.tag
+        value: "1.21.0"  # Override image tag
+    hooks:
+      - events: ["prepare"]
+        command: "./pre-deploy-nginx.sh"
+        showlogs: true
 
+# Use the template to define multiple releases
 releases:
-  - name: my-nginx
-    namespace: default
-    chart: stable/nginx
-    values:
-      - *defaultValues  # Reusing the default values block
-  - name: my-nginx-prod
-    namespace: prod
-    chart: stable/nginx
-    values:
-      - replicaCount: 5  # Overriding the replicaCount for this release
-      - *defaultValues  # Reusing the default values block
+  - name: nginx-main
+    namespace: web
+    <<: *nginx-template  # Use the template for the main Nginx deployment
+
+  - name: nginx-backup
+    namespace: backup
+    <<: *nginx-template  # Use the template for a backup Nginx deployment
+    set:
+      - name: replicaCount
+        value: 2  # Override the 
