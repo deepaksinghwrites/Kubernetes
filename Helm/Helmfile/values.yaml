@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: my-docker-repository/my-app
+  repository: bitnami/nginx
   tag: latest
   pullPolicy: IfNotPresent
 
