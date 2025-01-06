@@ -20,15 +20,12 @@ releases:
         command: "./pre-deploy-prometheus.sh"
         showlogs: true
 
-  - name: nginx
-    namespace: web
+releases:
+  - name: myapp
     chart: bitnami/nginx
-    version: "latest"
+    namespace: default
     values:
-      - values-nginx.yaml
-    set:
-      - name: image.tag
-        value: "latest"
+      - values-nginx.yaml           # Regular values file
     hooks:
       - events: ["prepare"]
         command: "./pre-deploy-nginx.sh"
