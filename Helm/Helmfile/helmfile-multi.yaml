@@ -23,12 +23,12 @@ releases:
   - name: nginx
     namespace: web
     chart: bitnami/nginx
-    version: "9.1.0"
+    version: "latest
     values:
       - values-nginx.yaml
     set:
       - name: image.tag
-        value: "1.21.0"
+        value: "latest"
     hooks:
       - events: ["prepare"]
         command: "./pre-deploy-nginx.sh"
