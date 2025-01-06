@@ -23,7 +23,7 @@ releases:
   - name: nginx
     namespace: web
     chart: bitnami/nginx
-    version: "latest
+    version: "latest"
     values:
       - values-nginx.yaml
     set:
