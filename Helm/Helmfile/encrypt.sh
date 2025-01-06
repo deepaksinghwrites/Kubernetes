@@ -27,6 +27,6 @@ echo "Generated GPG Key ID: $KEY_ID"
 
 # Step 4: Encrypt the values-secrets-to-encrypt.yaml file using the generated GPG key
 echo "Encrypting the values-secrets-to-encrypt.yaml file..."
-sops -e --pgp "$KEY_ID" values-secrets-to-encrypt.yaml > values-secrets-encrypted.yaml
+sops -e --pgp "$KEY_ID" values-secrets.yaml > values-secrets-encrypted.yaml
 
 echo "Encryption complete. Encrypted file saved as values-secrets-encrypted.yaml"
