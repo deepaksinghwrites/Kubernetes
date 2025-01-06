@@ -26,6 +26,3 @@ releases:
   - name: nginx-backup
     namespace: backup
     <<: *default  # Use the template for a backup Nginx deployment
-    set:
-      - name: replicaCount
-        value: 2  # Override the 
