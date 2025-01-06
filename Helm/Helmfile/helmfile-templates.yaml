@@ -4,7 +4,7 @@ repositories:
 
 # Define a template for Nginx releases
 templates:
-  nginx-template:
+  default: &default
     chart: bitnami/nginx
     version: "9.1.0"  # Replace with the desired version
     values:
@@ -21,11 +21,11 @@ templates:
 releases:
   - name: nginx-main
     namespace: web
-    <<: *nginx-template  # Use the template for the main Nginx deployment
+    <<: *default  # Use the template for the main Nginx deployment
 
   - name: nginx-backup
     namespace: backup
-    <<: *nginx-template  # Use the template for a backup Nginx deployment
+    <<: *default  # Use the template for a backup Nginx deployment
     set:
       - name: replicaCount
         value: 2  # Override the 
