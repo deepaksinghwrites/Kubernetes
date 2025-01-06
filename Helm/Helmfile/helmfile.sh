@@ -35,4 +35,4 @@ echo "Deleting unnecessary files..."
 rm -f LICENSE README-zh_CN.md README.md
 
 
-helmfile init
+helmfile init --interactive=false
