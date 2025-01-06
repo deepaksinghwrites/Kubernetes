@@ -29,10 +29,9 @@ releases:
         command: "./pre-deploy-prometheus.sh"
         showlogs: true
 
-  - name: nginx
-    namespace: web
+  - name: myapp
     chart: bitnami/nginx
-    version: "9.1.0"
+    namespace: default
     values:
       - values-common.yaml  # Common values shared across environments
     set:
