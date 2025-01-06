@@ -1,31 +1,29 @@
-# helmfile.yaml
-
 repositories:
   - name: stable
     url: https://charts.helm.sh/stable
   - name: bitnami
     url: https://charts.bitnami.com/bitnami
 
-templates:
-  default: &default
-    replicaCount: 3
-    image:
-      repository: nginx
-      tag: latest
-    resources:
-      requests:
-        cpu: "250m"
-        memory: "512Mi"
+# Define reusable value blocks using YAML anchors
+commonValues: &defaultValues
+  replicaCount: 3
+  image:
+    repository: nginx
+    tag: latest
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
 
 releases:
   - name: my-nginx
     namespace: default
     chart: stable/nginx
     values:
-      - *default  # Reusing the 'default' template here
+      - *defaultValues  # Reusing the default values block
   - name: my-nginx-prod
     namespace: prod
     chart: stable/nginx
     values:
       - replicaCount: 5  # Overriding the replicaCount for this release
-      - *default  # Reusing the default template
+      - *defaultValues  # Reusing the default values block
