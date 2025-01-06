@@ -5,7 +5,7 @@ repositories:
     url: https://charts.bitnami.com/bitnami
 
 # Define reusable value blocks using YAML anchors
-commonValues: &defaultValues
+templates: &defaultValues
   replicaCount: 3
   image:
     repository: nginx
