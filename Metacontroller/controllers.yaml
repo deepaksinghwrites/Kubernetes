@@ -1,0 +1,71 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-controller
+  template:
+    metadata:
+      labels:
+        app: app-controller
+    spec:
+      containers:
+      - name: controller
+        image: python:3
+        command: ["python3", "/hooks/app.py"]
+        volumeMounts:
+        - name: hooks
+          mountPath: /hooks
+      volumes:
+      - name: hooks
+        configMap:
+          name: app
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-controller
+spec:
+  selector:
+    app: app-controller
+  ports:
+  - port: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slack-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: slack-controller
+  template:
+    metadata:
+      labels:
+        app: slack-controller
+    spec:
+      containers:
+      - name: controller
+        image: vfarcic/metacontroller-demo:0.0.7
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: slack-controller
+spec:
+  selector:
+    app: slack-controller
+  ports:
+  - port: 8080

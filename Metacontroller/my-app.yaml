@@ -1,0 +1,8 @@
+apiVersion: devopstoolkitseries.com/v1
+kind: App
+metadata:
+  name: my-app
+spec:
+  image: vfarcic/silly-demo:1.0.6
+  port: 8080
+  host: silly-demo.127.0.0.1.nip.io
