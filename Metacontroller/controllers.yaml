@@ -57,6 +57,9 @@ spec:
       containers:
       - name: controller
         image: vfarcic/metacontroller-demo:0.0.7
+        env:
+        - name: SLACK_TOKEN
+          value: xoxp-8148002[...]
 
 ---
 

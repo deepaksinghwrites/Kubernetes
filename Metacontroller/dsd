@@ -1,0 +1,43 @@
+curl -X POST http://localhost:8080/slack -H "Content-Type: application/json" -d '{
+  "parent": {
+    "apiVersion": "devopstoolkitseries.com/v1",
+    "kind": "App",
+    "metadata": {
+      "name": "example-app",
+      "namespace": "default",
+      "uid": "12345"
+    },
+    "spec": {
+      "replicas": 3
+    }
+  },
+  "children": {
+    "deployments.apps/v1": [
+      {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "name": "example-app-deployment",
+          "namespace": "default"
+        },
+        "spec": {
+          "replicas": 3,
+          "template": {
+            "spec": {
+              "containers": [
+                {
+                  "name": "example-app",
+                  "image": "example-app:v1.0.0"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}'
+
+curl -X POST http://localhost:8080/slack \
+  -H "Content-Type: application/json" \
+  -d '{}'
