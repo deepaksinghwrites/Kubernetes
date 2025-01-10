@@ -35,3 +35,6 @@ echo "Verifying kubebuilder installation..."
 kubebuilder version
 
 echo "Kubebuilder version ${KUBEBUILDER_VERSION} has been successfully installed!"
+
+rm go1.19.linux-amd64.tar.gz
+
