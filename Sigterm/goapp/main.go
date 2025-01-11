@@ -6,14 +6,23 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync/atomic"
 	"syscall"
 	"time"
+	"io"        // Import the io package
 
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	requestCount  int64 // Counter for incoming requests
+	responseCount int64 // Counter for responses
+)
+
 func main() {
+	
 	r := gin.Default()
+
 	r.POST("/slack", slackHandler)
 
 	// Retrieve the port from the environment variable or default to 8080
@@ -51,11 +60,24 @@ func main() {
 	if err := server.Shutdown(shutdownCtx); err != nil {
 		log.Fatalf("Server forced to shutdown: %v", err)
 	}
+	log.Printf("Total requests: %d, Total responses: %d\n", atomic.LoadInt64(&requestCount), atomic.LoadInt64(&responseCount))
 
 	log.Println("Server shutdown complete.")
 }
 
 func slackHandler(c *gin.Context) {
-	// Your handler logic here
-	c.JSON(http.StatusOK, gin.H{"message": "Slack endpoint hit!"})
+    // Read the entire payload from the request body
+	atomic.AddInt64(&requestCount, 1) // Increment request count
+	body, err := io.ReadAll(c.Request.Body)                        
+	atomic.AddInt64(&responseCount, 1) // Increment response count after request is handled
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to read request body"})
+        return
+    }
+
+    // Log the size of the payload
+    log.Printf("Received payload of size: %d bytes", len(body))
+
+    // Respond to the client
+    c.JSON(http.StatusOK, gin.H{"message": "Slack endpoint hit!"})
 }

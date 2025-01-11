@@ -38,3 +38,5 @@ echo "Kubebuilder version ${KUBEBUILDER_VERSION} has been successfully installed
 
 rm go1.19.linux-amd64.tar.gz
 
+go get github.com/nlopes/slack
+go mod tidy

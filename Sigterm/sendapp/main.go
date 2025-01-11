@@ -65,9 +65,9 @@ func main() {
 	var wg sync.WaitGroup
 
 	// Simulate infinite active connections by starting multiple goroutines
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 5; i++ {
 		// Set payload size (e.g., 100MB for each request)
-		payloadSize := 100 * 1024 * 1024 // 100MB payload for each request
+		payloadSize := 50 * 1024 * 1024 // 100MB payload for each request
 
 		// Add 1 to the WaitGroup counter for each new goroutine
 		wg.Add(1)
