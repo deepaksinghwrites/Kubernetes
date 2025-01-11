@@ -7,4 +7,4 @@ spec:
   report:
     kind: "slack"
     channel: "bots"
-    key: ""
+    key: "YOUR BOT KEY"
