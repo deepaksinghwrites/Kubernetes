@@ -6,9 +6,9 @@ openssl req -x509 -newkey rsa:4096 -days 365 -nodes -sha256 \
 
 
 # Variables
-TLS_CERT_PATH="/home/ubuntu/certs/tls.crt"  # Path to your tls.crt file
+TLS_CERT_PATH="${BASE_PATH}/certs/tls.crt"  # Path to your tls.crt file
 SYSTEM_CA_DIR="/usr/local/share/ca-certificates"  # Directory for system-wide certificates
-DOCKER_CERT_DIR="/etc/docker/certs.d/my-registry:5000"  # Docker directory for the registry certificate
+DOCKER_CERT_DIR="/etc/docker/certs.d/my-registry:30000"  # Docker directory for the registry certificate
 
 # Check if the TLS certificate exists
 if [[ ! -f "$TLS_CERT_PATH" ]]; then

@@ -4,7 +4,7 @@
 REGISTRY_NAME="my-registry"
 
 # Replace 'docker-registry' with the actual name of your service and namespace if applicable
-SERVICE_NAME="private-docker-registry"
+SERVICE_NAME="docker-registry"
 NAMESPACE="default"  # Replace with the actual namespace if it's different
 
 # Print the registry name

@@ -5,8 +5,10 @@ metadata:
 spec:
   containers:
     - name: nginx
-      image: my-registry:5000/mynginx:v3  # Private registry and image
-      ports:
-        - containerPort: 80
+      image: my-registry:30000/mynginx:v1  # Private registry and image
+      resources: {}
+  dnsPolicy: ClusterFirst
   imagePullSecrets:
     - name: nginx-secret  # Secret to pull from private registry
+  restartPolicy: Always
+status: {}
