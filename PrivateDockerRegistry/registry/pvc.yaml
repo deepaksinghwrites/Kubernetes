@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   storageClassName: standard  # Reference to the storage class for k3d
   hostPath:
-    path: ${BASE_PATH}/repos  # Path to where data will be stored in the container
+    path: /home/laptopdev/Kubernetes/PrivateDockerRegistry/registry/repos  # Path to where data will be stored in the container
   nodeAffinity:
     required:
       nodeSelectorTerms:

@@ -16,8 +16,8 @@ scp "$TLS_CERT_PATH" docker@$(minikube ip):/tmp/
 # SSH into Minikube and move the certificate to the trusted directory
 echo "Moving certificate to trusted directory on Minikube..."
 minikube ssh <<EOF
-  sudo mv /tmp/tls.crt /usr/local/share/ca-certificates/my-registry.crt
-  sudo update-ca-certificates
+  sudo mv /tmp/tls.crt /usr/local/share/ca-certificates/tls.crt
+  sudo update-ca-certificates --fresh
 EOF
 
 # Restart Minikube to apply the changes

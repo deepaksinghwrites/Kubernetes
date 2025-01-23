@@ -3,29 +3,26 @@
 # Set the registry name
 REGISTRY_NAME="my-registry"
 
-# Replace 'docker-registry' with the actual name of your service and namespace if applicable
-SERVICE_NAME="docker-registry"
-NAMESPACE="default"  # Replace with the actual namespace if it's different
-
 # Print the registry name
 echo "Registry Name: $REGISTRY_NAME"
 
-# Get the IP address of the service
-REGISTRY_IP=$(kubectl get svc $SERVICE_NAME -n $NAMESPACE -o jsonpath='{.spec.clusterIP}')
+# Get the Minikube IP address
+REGISTRY_IP=$(minikube ip)
 
-# Check if the IP was found
+# Check if the Minikube IP was found
 if [ -z "$REGISTRY_IP" ]; then
-  echo "Error: Could not find the IP for service '$SERVICE_NAME'."
+  echo "Error: Could not retrieve Minikube IP."
   exit 1
 fi
 
-# Print the IP address
-echo "Docker Registry IP is: $REGISTRY_IP"
+# Print the Minikube IP address
+echo "Minikube IP is: $REGISTRY_IP"
 
 # Export the variables for use in other commands or scripts
 export REGISTRY_NAME
 export REGISTRY_IP
 
+# Update /etc/hosts to associate the registry name with the Minikube IP
 echo "$REGISTRY_IP $REGISTRY_NAME" | sudo tee -a /etc/hosts > /dev/null
 
 
