@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: .duckdns.org
+    - host: .epicdns.me
       http:
         paths:
           - path: /api
