@@ -1,0 +1,110 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk'
+        nodejs 'nodejs'
+    }
+
+    environment {
+        NVD_API_KEY = credentials('NVD_API_KEY')
+        SCANNER_HOME = '/opt/sonar-scanner'
+        AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
+        AWS_ECR_REPO_NAME = credentials('ECR_REP02')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
+        DEPENDENCY_CHECK_BIN = '/opt/dependency-check/bin/dependency-check.sh' // OWASP dependency checks
+        DOCKER_IMAGE_TAG = "${BUILD_NUMBER}" // Set DOCKER_IMAGE_TAG to BUILD_NUMBER
+    }
+
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/deepaksinghwrites/Kubernetes.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('EKSNodejs/Backend') {
+                    withSonarQubeEnv('sonar-scanner') {
+                        sh ''' 
+                            $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=EKSNodejs -Dsonar.projectKey=EKSNodejs
+                        '''
+                    }
+                }
+            }
+        }
+
+    stage('Build Docker Image') {
+            steps {
+                script {
+                    // Debug the values of the variables
+                    echo "REPOSITORY_URI: ${REPOSITORY_URI}"
+                    echo "AWS_ECR_REPO_NAME: ${AWS_ECR_REPO_NAME}"
+                    echo "DOCKER_IMAGE_TAG: ${DOCKER_IMAGE_TAG}"
+
+                    // Login to AWS ECR
+                    sh '''#!/bin/bash
+                        aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin ${REPOSITORY_URI}
+                    '''
+                    // Change directory to where the Dockerfile is located
+                    dir('EKSNodejs/Backend') {
+                        // Build Docker image
+                        sh '''#!/bin/bash
+                            docker build -t ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${DOCKER_IMAGE_TAG} .
+                        '''
+                        // Push Docker image to ECR
+                        sh '''#!/bin/bash
+                            docker push ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${DOCKER_IMAGE_TAG}
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Trivy File Scan') {
+            steps {
+                sh ' trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyImage.txt '
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/deepaksinghwrites/Kubernetes.git'
+            }
+        }
+
+        stage('Update Deployment File') {
+            environment {
+                GIT_REPO_NAME = "Kubernetes"
+                GIT_USER_NAME = "deepaksinghwrites"
+            }
+            steps {
+                dir('EKSNodejs/k8s/Backend') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            cat deployment.yaml
+                            git config user.email "dsingh.gtmba18@gmail.com"
+                            git config user.name "deepaksinghwrites"
+                            BUILD_NUMBER=${BUILD_NUMBER}
+                            echo $BUILD_NUMBER
+                            ImageTag=$(grep -oP '(?<=backend:).*' deployment.yaml)
+                            echo $ImageTag
+                            sed -i "s|${AWS_ECR_REPO_NAME}:${ImageTag}|${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}|g" deployment.yaml
+                            git add deployment.yaml
+                            git commit -m "Update deployment image to version \${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
