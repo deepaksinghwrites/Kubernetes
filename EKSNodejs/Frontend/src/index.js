@@ -1,13 +1,14 @@
+import { createRoot } from "react-dom/client";
 import React from "react";
-import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import { Paper, TextField, Checkbox, Button } from "@mui/material";
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root"));
+root.render(
     <React.StrictMode>
         <div className="app-wrapper">
             <App />
         </div>
-    </React.StrictMode>,
-    document.getElementById("root")
+    </React.StrictMode>
 );
